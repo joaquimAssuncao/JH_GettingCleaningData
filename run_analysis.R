@@ -32,12 +32,18 @@ testDS <- cbind(testFeatures, testActivity, testSubjects)
 names(trainDS) <- sub ("t", "train_", names(trainDS))
 
 nl <- nrow(trainDS)
-nc <- ncow(trainDS)
+nc <- ncol(trainDS)
 
 #Just to cbind 
 tmp <- data.frame(matrix(NA, nrow = nl- nrow(testDS) , ncol = nc))
 names(tmp) <- names(testDS)
 fulltestDS  <- rbind(tmp,testDS)
 
-#voila, one tidy DS
+#voila, one DS
 fullDS <- cbind(trainDS, fulltestDS)
+
+#Now the mean for the tidy DS... It's all for now
+fullDS[is.na(fullDS)] <-0
+tidyDS <- apply(fullDS, 1, mean)
+
+write.table(tidyDS, "tidyDS.txt", sep="\t")
